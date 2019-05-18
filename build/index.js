@@ -104,6 +104,28 @@ function init() {
     if (!window.addEventListener) return // Check for IE9+
 
     let options = INSTALL_OPTIONS
+
+    console.log(JSON.parse(JSON.stringify(options)))
+
+    const theme = (({
+        detection
+    }) => {
+        // MacOS CSS media query
+        if (detection.query && window.matchMedia('(prefers-color-scheme: dark)').matches) return true
+
+        // High contrast CSS media query
+        if (detection.highcontrast && window.matchMedia('(-ms-high-contrast: white-on-black)').matches) return true
+
+        // Class on body
+        if (detection.bodyclass && document.getElementsByTagName("body")[0].classList.contains(typeof bodyclass === "boolean" ? "dm-dark" : bodyclass)) return true
+
+        // Night time
+        if (detection.time && new Date().getHours() >= time.min ? time.min :  true && new Date().getHours() >= time.max ? time.max : 20) return true
+
+        // If all checks fail
+        return false
+    })(options)
+
     let element
 
     // updateElement runs every time the options are updated.

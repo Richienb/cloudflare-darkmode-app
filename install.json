@@ -1,59 +1,166 @@
 {
-  "$schema": "http://json.schemastore.org/install",
-  "resources": {
-    "body": [
-      {
-        "type": "style",
-        "src": "./build/styles.css"
-      },
-      {
-        "type": "script",
-        "src": "./build/index.js"
-      }
-    ]
-  },
-  "workers": [
-    {
-      "src": "./build/worker.js"
-    }
-  ],
-  "dns": [
-    {
-      "type": "TXT",
-      "content": "Managed TXT Record",
-      "name": "Created by create-cloudflare-app",
-      "ttl": 120
-    }
-  ],
-  "preview": {
-    "handlers": [
-      {
-        "options": ["_default"],
-        "execute": "INSTALL_SCOPE.setOptions(INSTALL_OPTIONS)"
-      }
-    ]
-  },
-  "options": {
-    "properties": {
-      "location": {
-        "title": "Message Location",
-        "description": "Where should the message appear?",
-        "order": 0,
-        "type": "object",
-        "format": "element",
-        "default": {
-          "selector": "body",
-          "method": "prepend"
+    "$schema": "http://json.schemastore.org/install",
+    "resources": {
+        "body": [{
+                "type": "style",
+                "src": "./build/styles.css"
+            },
+            {
+                "type": "script",
+                "src": "./build/index.js"
+            }
+        ]
+    },
+    "preview": {
+        "handlers": [{
+            "options": ["_default"],
+            "execute": "INSTALL_SCOPE.setOptions(INSTALL_OPTIONS)"
+        }]
+    },
+    "options": {
+        "properties": {
+            "detection": {
+                "title": "Detection strategies",
+                "type": "object",
+                "order": 0,
+                "properties": {
+                    "query": {
+                        "title": "Detect prefers-color-scheme",
+                        "description": "Detect if the browser requested dark mode.",
+                        "type": "boolean",
+                        "default": true,
+                        "order": 0
+                    },
+                    "highcontrast": {
+                        "title": "Detect -ms-high-contrast",
+                        "description": "Detect if IE-like browsers requested white text on a black background.",
+                        "type": "boolean",
+                        "default": true,
+                        "order": 0
+                    },
+                    "bodyclass": {
+                        "title": "Detect classes",
+                        "description": "Detect if specific classes are present in the body element.",
+                        "type": "boolean",
+                        "default": false,
+                        "order": 0
+                    },
+                    "bodyclassarr": {
+                        "title": "Classes to detect",
+                        "type": "array",
+                        "order": 0,
+                        "showIf": {
+                            "detection.bodyclass": true
+                        },
+                        "items": {
+                            "title": "Item",
+                            "type": "object",
+                            "properties": {
+                                "text": {
+                                    "order": 0,
+                                    "title": "Class name",
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "time": {
+                        "title": "Detect night time",
+                        "description": "Detect if the current time is in the night time range.",
+                        "type": "boolean",
+                        "default": false,
+                        "order": 0
+                    },
+                    "nightstart": {
+                        "title": "Night starting time",
+                        "type": "string",
+                        "order": 0,
+                        "showIf": {
+                            "detection.time": true
+                        },
+                        "format": "time",
+                        "default": "8:00 PM"
+                    },
+                    "nightend": {
+                        "title": "Night starting time",
+                        "type": "string",
+                        "order": 0,
+                        "showIf": {
+                            "detection.time": true
+                        },
+                        "format": "time",
+                        "default": "6:00 AM"
+                    }
+                }
+            },
+            "handling": {
+                "title": "Theme type handling",
+                "type": "object",
+                "order": 0,
+                "properties": {
+                    "addclass": {
+                        "title": "Add class",
+                        "description": "Add a class to an element",
+                        "type": "boolean",
+                        "default": false,
+                        "order": 0
+                    },
+                    "addclassop": {
+                        "title": "Class options",
+                        "type": "object",
+                        "order": 0,
+                        "showIf": {
+                            "handling.addclass": true
+                        },
+                        "properties": {
+                            "eladd": {
+                                "title": "Element to add class to",
+                                "type": "string",
+                                "order": 0,
+                                "format": "selector",
+                                "default": "body"
+                            },
+                            "addlight": {
+                                "title": "Add a class for light mode",
+                                "type": "boolean",
+                                "order": 0,
+                                "default": false
+                            },
+                            "lightclass": {
+                                "title": "Light theme class name",
+                                "type": "string",
+                                "order": 0,
+                                "showIf": {
+                                    "handling.addclassop.addlight": true
+                                },
+                                "default": "theme--light"
+                            },
+                            "adddark": {
+                                "title": "Add a class for dark mode",
+                                "type": "boolean",
+                                "default": true,
+                                "order": 0
+                            },
+                            "darkclass": {
+                                "title": "Dark theme class name",
+                                "type": "string",
+                                "order": 0,
+                                "showIf": {
+                                    "handling.addclassop.adddark": true
+                                },
+                                "default": "theme--dark"
+                            }
+                        }
+                    },
+                    "autodark": {
+                        "title": "Automatically adjust",
+                        "description": "Automatically adjust darkness and brightness of your content.",
+                        "type": "boolean",
+                        "default": false,
+                        "order": 0
+                    }
+                }
+            }
         }
-      },
-      "message": {
-        "title": "Message",
-        "description": "A short example message.",
-        "type": "string",
-        "format": "richtext",
-        "order": 1,
-        "default": "<h1>Welcome to Cloudflare Apps!</h1><p>Download this app every time you want to make a new project.</p><p>This app renders a message to the user's website, installs a Cloudflare Worker that adds a 'Hello-Workers' header to each request, and sets a TXT DNS record with a value of 'Hello DNS'. The first Cloudflare Workers script in install.json will run on every request to the user's website.  Currently, one Worker is allowed per app, but you may set an unlimited number of DNS records.</p>"
-      }
     }
-  }
 }
