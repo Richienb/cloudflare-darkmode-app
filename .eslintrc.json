@@ -1,0 +1,29 @@
+{
+    "parser": "babel-eslint",
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "extends": ["google", "prettier"],
+    "plugins": ["prettier"],
+    "globals": {
+        "document": true,
+        "window": true,
+        "process": true,
+        "fetch": false,
+        "INSTALL": false,
+        "INSTALL_ID": false,
+        "INSTALL_SCOPE": false,
+        "INSTALL_OPTIONS": false,
+        "INSTALL_PRODUCT": false
+    },
+    "rules": {
+        "indent": ["error", 4],
+        "quotes": ["error", "double"],
+        "semi": ["error", "never"],
+        "brace-style": 0,
+        "max-len": 0,
+        "require-jsdoc": 0,
+        "no-unused-vars": 0
+    }
+}
