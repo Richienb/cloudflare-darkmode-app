@@ -31,28 +31,8 @@ module.exports = {
                     ],
                 },
             },
-
             {
-                test: /workers\/.*\.js$/,
-                loader: "babel-loader",
-                exclude: /(node_modules)/,
-                options: {
-                    compact: false,
-                    presets: [
-                        [
-                            "env",
-                            {
-                                targets: {
-                                    node: "current",
-                                },
-                            },
-                        ],
-                    ],
-                },
-            },
-
-            {
-                test: /\.css$/,
+                test: /\.sass$/,
                 use: [{
                         loader: "file-loader",
                         options: {
@@ -61,6 +41,7 @@ module.exports = {
                     },
                     "extract-loader",
                     "css-loader",
+                    "sass-loader"
                 ],
             },
         ],

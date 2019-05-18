@@ -1,59 +1,70 @@
-// this import statement tells webpack to include styles.css in the build
-import css from "./styles.css"
+import css from "./styles.sass" // eslint-disable-line no-unused-vars
 
-function init() {
-    if (!window.addEventListener) return // Check for IE9+
+import $ from "jquery/dist/jquery.slim"
 
-    let options = INSTALL_OPTIONS
+import moment from "moment"
 
-    console.log(JSON.parse(JSON.stringify(options)))
+let options = INSTALL_OPTIONS
+
+console.log(JSON.parse(JSON.stringify(options)))
+
+// documentReady runs every time the options are updated.
+// Most of your code will end up inside this function.
+function documentReady() {
 
     const theme = (({
-        detection
-    }) => {
+        query,
+        highcontrast,
+        bodyclass,
+        bodyclassarr,
+        time,
+        nightend,
+        nightstart
+    }) => [
         // MacOS CSS media query
-        if (detection.query && window.matchMedia('(prefers-color-scheme: dark)').matches) return true
+        query && window.matchMedia("(prefers-color-scheme: dark)").matches,
 
         // High contrast CSS media query
-        if (detection.highcontrast && window.matchMedia('(-ms-high-contrast: white-on-black)').matches) return true
+        highcontrast && window.matchMedia("(-ms-high-contrast: white-on-black)").matches,
 
         // Class on body
-        if (detection.bodyclass && document.getElementsByTagName("body")[0].classList.contains(typeof bodyclass === "boolean" ? "dm-dark" : bodyclass)) return true
+        bodyclass && ($("body").attr("class") || "").split(/\s+/).some(i => i in bodyclassarr.reduce((acc, val) => {
+            acc.push(val.text)
+            return acc
+        }, [])),
 
         // Night time
-        if (detection.time && new Date().getHours() >= time.min ? time.min : 6 && new Date().getHours() >= time.max ? time.max : 20) return true
+        time && moment().isAfter(moment(nightstart, "H:mm")) && moment().isBefore(moment(nightend, "H:mm"))
+    ].some(i => i))(options.detection) ? "dark" : "light"
 
-        // If all checks fail
-        return false
-    })(options)
+    if (options.handling.addsel) (({
+        adddark,
+        addlight,
+        lightclass,
+        darkclass,
+        eladd
+    }) => {
+        if (addlight) $(eladd).toggleClass(lightclass, theme === "light")
+        if (adddark) $(eladd).toggleClass(darkclass, theme === "dark")
+    })(options.handling.addselop)
 
-    let element
+    // TODO: $.trigger as handler
+    // element = INSTALL.createElement(options.location, element)
+    //
+    // // Set the app attribute to your app's dash-delimited alias.
+    // element.setAttribute("app", "your-app-name")
+    // element.innerHTML = options.message
+}
 
-    // updateElement runs every time the options are updated.
-    // Most of your code will end up inside this function.
-    function updateElement() {
-        element = INSTALL.createElement(options.location, element)
+// INSTALL_SCOPE is an object that is used to handle option changes without refreshing the page.
+window.INSTALL_SCOPE = {
+    setOptions(nextOptions) {
+        options = nextOptions
 
-        // Set the app attribute to your app's dash-delimited alias.
-        element.setAttribute("app", "your-app-name")
-        element.innerHTML = options.message
-    }
-
-    // INSTALL_SCOPE is an object that is used to handle option changes without refreshing the page.
-    window.INSTALL_SCOPE = {
-        setOptions(nextOptions) {
-            options = nextOptions
-
-            updateElement()
-        }
-    }
-
-    // This code ensures that the app doesn't run before the page is loaded.
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", updateElement)
-    } else {
-        updateElement()
+        documentReady()
     }
 }
 
-init()
+// This code ensures that the app doesn't run before the page is loaded.
+if (document.readyState === "loading") $(document).on("DOMContentLoaded", documentReady)
+else documentReady()

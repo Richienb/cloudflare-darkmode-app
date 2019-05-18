@@ -38,19 +38,19 @@
                         "default": true,
                         "order": 0
                     },
-                    "bodyclass": {
-                        "title": "Detect classes",
-                        "description": "Detect if specific classes are present in the body element.",
+                    "bodysel": {
+                        "title": "Detect selectors",
+                        "description": "Detect if specific selectors are present in the body element.",
                         "type": "boolean",
                         "default": false,
                         "order": 0
                     },
-                    "bodyclassarr": {
-                        "title": "Classes to detect",
+                    "bodyselarr": {
+                        "title": "Selectors to detect",
                         "type": "array",
                         "order": 0,
                         "showIf": {
-                            "detection.bodyclass": true
+                            "detection.bodysel": true
                         },
                         "items": {
                             "title": "Item",
@@ -58,7 +58,7 @@
                             "properties": {
                                 "text": {
                                     "order": 0,
-                                    "title": "Class name",
+                                    "title": "Selector name",
                                     "type": "string"
                                 }
                             }
@@ -98,30 +98,30 @@
                 "type": "object",
                 "order": 0,
                 "properties": {
-                    "addclass": {
-                        "title": "Add class",
-                        "description": "Add a class to an element",
+                    "addsel": {
+                        "title": "Add selector",
+                        "description": "Add a selector to an element",
                         "type": "boolean",
                         "default": false,
                         "order": 0
                     },
-                    "addclassop": {
-                        "title": "Class options",
+                    "addselop": {
+                        "title": "Selector options",
                         "type": "object",
                         "order": 0,
                         "showIf": {
-                            "handling.addclass": true
+                            "handling.addsel": true
                         },
                         "properties": {
                             "eladd": {
-                                "title": "Element to add class to",
+                                "title": "Element to add selector to",
                                 "type": "string",
                                 "order": 0,
                                 "format": "selector",
                                 "default": "body"
                             },
                             "addlight": {
-                                "title": "Add a class for light mode",
+                                "title": "Add a selector for light mode",
                                 "type": "boolean",
                                 "order": 0,
                                 "default": false
@@ -131,12 +131,12 @@
                                 "type": "string",
                                 "order": 0,
                                 "showIf": {
-                                    "handling.addclassop.addlight": true
+                                    "handling.addselop.addlight": true
                                 },
                                 "default": "theme--light"
                             },
                             "adddark": {
-                                "title": "Add a class for dark mode",
+                                "title": "Add a selector for dark mode",
                                 "type": "boolean",
                                 "default": true,
                                 "order": 0
@@ -146,18 +146,54 @@
                                 "type": "string",
                                 "order": 0,
                                 "showIf": {
-                                    "handling.addclassop.adddark": true
+                                    "handling.addselop.adddark": true
                                 },
                                 "default": "theme--dark"
                             }
                         }
                     },
-                    "autodark": {
+                    "autoadj": {
                         "title": "Automatically adjust",
                         "description": "Automatically adjust darkness and brightness of your content.",
                         "type": "boolean",
                         "default": false,
                         "order": 0
+                    },
+                    "colours": {
+                        "title": "Adjustment options",
+                        "type": "object",
+                        "order": 0,
+                        "showIf": {
+                            "handling.autoadj": true
+                        },
+                        "properties": {
+                            "colour": {
+                                "title": "Theme colours",
+                                "description": "These are the colours this tool will recognise for automatic conversion",
+                                "type": "array",
+                                "order": 0,
+                                "items": {
+                                    "title": "Theme colour pair",
+                                    "type": "object",
+                                    "properties": {
+                                        "light": {
+                                            "order": 0,
+                                            "title": "Light colour",
+                                            "format": "color",
+                                            "type": "string",
+                                            "default": "#ffffff"
+                                        },
+                                        "dark": {
+                                            "order": 0,
+                                            "title": "Dark colour",
+                                            "format": "color",
+                                            "type": "string",
+                                            "default": "#000000"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

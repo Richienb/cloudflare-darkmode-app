@@ -23,7 +23,6 @@
         "semi": ["error", "never"],
         "brace-style": 0,
         "max-len": 0,
-        "require-jsdoc": 0,
-        "no-unused-vars": 0
+        "require-jsdoc": 0
     }
 }

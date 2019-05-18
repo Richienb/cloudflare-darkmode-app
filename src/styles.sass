@@ -1,0 +1,24 @@
+// Set the app attribute to your app's dash-delimited alias.
+cloudflare-app[app="your-app-name"]
+  display: block
+  margin: 0.5em 0.2em
+  outline: 1px dotted
+  padding: 0.5em
+
+  p
+    // Use native elements when you'd like to inherit some styles from the page.
+    text-indent: 0
+
+  h1
+    // Use em units to scale elements for different inherited styles.
+    font-size: 1.8em
+    font-weight: bold
+
+  example-button
+    // Use custom elements to avoid style inheritance.
+    border: 1px solid
+
+  .example-highlighted
+    // Prefix classes with your app's alias to avoid style collisions.
+    background-color: yellow
+    outline: 0.2em solid yellow
