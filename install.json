@@ -46,7 +46,7 @@
                         "order": 0
                     },
                     "bodyselarr": {
-                        "title": "Selectors to detect",
+                        "title": "Selector detection options",
                         "type": "array",
                         "order": 0,
                         "showIf": {
@@ -71,25 +71,29 @@
                         "default": false,
                         "order": 0
                     },
-                    "nightstart": {
-                        "title": "Night starting time",
-                        "type": "string",
+                    "timecon": {
+                        "title": "Time detection configuration",
+                        "type": "object",
                         "order": 0,
                         "showIf": {
                             "detection.time": true
                         },
-                        "format": "time",
-                        "default": "8:00 PM"
-                    },
-                    "nightend": {
-                        "title": "Night starting time",
-                        "type": "string",
-                        "order": 0,
-                        "showIf": {
-                            "detection.time": true
-                        },
-                        "format": "time",
-                        "default": "6:00 AM"
+                        "properties": {
+                            "nightstart": {
+                                "title": "Night starting time",
+                                "type": "string",
+                                "order": 0,
+                                "format": "time",
+                                "default": "8:00 PM"
+                            },
+                            "nightend": {
+                                "title": "Night ending time",
+                                "type": "string",
+                                "order": 0,
+                                "format": "time",
+                                "default": "6:00 AM"
+                            }
+                        }
                     }
                 }
             },
@@ -152,6 +156,32 @@
                             }
                         }
                     },
+                    "trigger": {
+                        "title": "Trigger event",
+                        "description": "Trigger an event on the document element.",
+                        "type": "boolean",
+                        "default": false,
+                        "order": 0
+                    },
+                    "triggercon": {
+                        "title": "Trigger options",
+                        "type": "object",
+                        "order": 0,
+                        "showIf": {
+                            "handling.trigger": true
+                        },
+                        "properties": {
+                            "triggername": {
+                                "title": "Event name",
+                                "type": "string",
+                                "order": 0,
+                                "showIf": {
+                                    "handling.trigger": true
+                                },
+                                "default": "themechanged"
+                            }
+                        }
+                    },
                     "autoadj": {
                         "title": "Automatically adjust",
                         "description": "Automatically adjust darkness and brightness of your content.",
@@ -176,6 +206,25 @@
                                     "title": "Theme colour pair",
                                     "type": "object",
                                     "properties": {
+                                        "limits": {
+                                            "title": "Limit to specific elements",
+                                            "type": "array",
+                                            "order": 0,
+                                            "items": {
+                                                "notitle": true,
+                                                "type": "object",
+                                                "properties": {
+                                                    "location": {
+                                                        "order": 1,
+                                                        "title": "Element",
+                                                        "description": "Select the part of your page this rule should apply to.",
+                                                        "type": "string",
+                                                        "default": "body",
+                                                        "format": "selector"
+                                                    }
+                                                }
+                                            }
+                                        },
                                         "light": {
                                             "order": 0,
                                             "title": "Light colour",

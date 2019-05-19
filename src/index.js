@@ -8,6 +8,38 @@ let options = INSTALL_OPTIONS
 
 console.log(JSON.parse(JSON.stringify(options)))
 
+$.fn.colourReplace = function() {
+    // Convert rgb color strings to hex
+    function rgb2hex(rgb) {
+        if (/^#[0-9A-F]{6}$/i.test(rgb)) return rgb;
+        rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+
+        function hex(x) {
+            return (`0${parseInt(x).toString(16)}`).slice(-2);
+        }
+        return `#${hex(rgb[1])}${hex(rgb[2])}${hex(rgb[3])}`;
+    }
+
+    // Select and run a map function on every tag
+    this.find("*").addBack(this).map((_i, el) => {
+        // Get the computed styles of each tag
+        const styles = window.getComputedStyle(el);
+
+        // Go through each computed style and search for "color"
+        Object.keys(styles).reduce((_acc, k) => {
+            const name = styles[k];
+            const value = styles.getPropertyValue(name);
+            if (value !== null && name.includes("color")) {
+                // Convert the rgb color to hex and compare with the target color
+                if (value.includes("rgb(") && rgb2hex(value) === findHexColor) {
+                    // Replace the color on this found color attribute
+                    $(el).css(name, replaceWith);
+                }
+            }
+        });
+    });
+}
+
 // documentReady runs every time the options are updated.
 // Most of your code will end up inside this function.
 function documentReady() {
@@ -37,7 +69,7 @@ function documentReady() {
         time && moment().isAfter(moment(nightstart, "H:mm")) && moment().isBefore(moment(nightend, "H:mm"))
     ].some(i => i))(options.detection) ? "dark" : "light"
 
-    if (options.handling.addsel) (({
+    if (options.handling.addsel)(({
         adddark,
         addlight,
         lightclass,
@@ -48,7 +80,22 @@ function documentReady() {
         if (adddark) $(eladd).toggleClass(darkclass, theme === "dark")
     })(options.handling.addselop)
 
-    // TODO: $.trigger as handler
+    if (options.handling.trigger) $(document).trigger(options.handling.triggername, {
+        theme
+    })
+
+    if (options.handling.autoadj)(i => i.map(({
+        light,
+        dark,
+        limits
+    }) => {
+        if (limits === []) limits = ["body"]
+        limits.map(sel => {
+            if (theme === "light") $(sel).colourReplace(light, dark)
+            else $(sel).colourReplace(dark, light)
+        })
+    }))(options.handling.colours.colour)
+
     // element = INSTALL.createElement(options.location, element)
     //
     // // Set the app attribute to your app's dash-delimited alias.
